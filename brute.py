@@ -45,8 +45,9 @@ b[0][0] = 4
 assert a != b
 
 def brute():
+    prev_time = time.time()
     for l in range(40):
-        print(l, time.time())
+        print(l, time.time() - prev_time)
         for sequence in combinations_with_replacement(range(4), l):
             curr_table = mycopy(curr)
             for step in sequence:
