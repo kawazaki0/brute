@@ -1,6 +1,7 @@
-from copy import deepcopy
+import itertools
 import time
-from itertools import combinations_with_replacement
+
+from copy import deepcopy
 
 goal = [[1,2,3],
         [4,5,6],
@@ -10,9 +11,13 @@ curr = [[1,2,3],
         [4,8,5],
         [7,9,6]]
 
-curr = [[1,2,3],
-        [4,5,9],
-        [7,8,6]]
+curr = [[4,1,3],
+        [5,6,9],
+        [7,2,8]]
+
+# curr = [[1,2,3],
+#         [4,5,9],
+#         [7,8,6]]
 
 def op_0(state):
     return op(state, 0, 0)
@@ -48,7 +53,7 @@ def brute():
     prev_time = time.time()
     for l in range(40):
         print(l, time.time() - prev_time)
-        for sequence in combinations_with_replacement(range(4), l):
+        for sequence in itertools.product(range(4), repeat=l):
             curr_table = mycopy(curr)
             for step in sequence:
                 curr_table = ops[step](curr_table)
