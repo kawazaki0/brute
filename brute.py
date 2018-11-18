@@ -35,17 +35,22 @@ ops = {0: op_0,
        2: op_2,
        3: op_3}
 
+def mycopy(lst):
+    return list(map(list, lst))
+
+a = [[1,2],]
+b = mycopy(a)
+b[0][0] = 4
+
+assert a != b
+
 def brute():
-    for l in range(0, 40):
+    for l in range(40):
         print(l, time.time())
-        # print("x")
         for sequence in combinations_with_replacement(range(4), l):
-            curr_table = deepcopy(curr)
-            # print("try", sequence)
+            curr_table = mycopy(curr)
             for step in sequence:
                 curr_table = ops[step](curr_table)
-                # print ("step", step)
-                # print (curr_table)
                 if goal == curr_table:
                     print ("yeah", sequence)
                     return sequence
