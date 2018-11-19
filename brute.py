@@ -1,3 +1,4 @@
+import functools
 import itertools
 import time
 
@@ -90,11 +91,11 @@ def test():
 
 test()
 
-def do(l):
+def do(start_state, l):
     print("start", l)
     prev_time = time.time()
     for sequence in itertools.product(range(4), repeat=l):
-        game = Game(curr)
+        game = Game(start_state)
         for i, step in enumerate(sequence):
             game.move(step)
             if game.completed():
@@ -102,11 +103,12 @@ def do(l):
                 return sequence[:i+1]
     print("done", l, time.time() - prev_time)
 
-def brute():
+def brute(curr):
+    do_f = functools.partial(do, curr)
     with Pool(3) as p:
-        return p.map(do, range(10))
+        return p.map(do_f, range(10))
 
-res = brute()
+res = brute(curr)
 
 res_without_none = [r for r in res if r is not None]
 
