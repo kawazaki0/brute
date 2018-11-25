@@ -15,12 +15,21 @@ def _brute_length(game_cls, start_state, l):
         for step in sequence:
             game.move(step)
         if game.completed():
-            # print ("yeah", sequence, time.time() - prev_time)
+            # print("yeah", sequence, time.time() - prev_time)
             return sequence
     # print("done", l, time.time() - prev_time)
 
-def brute(game_cls, state, max_length=10, pool_size=3):
-    do_f = functools.partial(_brute_length, game_cls, state)
+
+def brute_sync(game_cls, init_state, max_length=10, pool_size=3):
+    do_f = functools.partial(_brute_length, game_cls, init_state)
+    for l in range(max_length):
+        r = do_f(l)
+        if r is not None:
+            return r
+    return None
+
+def brute_async(game_cls, init_state, max_length=10, pool_size=3):
+    do_f = functools.partial(_brute_length, game_cls, init_state)
     with Pool(pool_size) as p:
         res = p.map(do_f, range(max_length))
 
