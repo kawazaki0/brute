@@ -1,7 +1,7 @@
 from game import Game
 
-class RotateGame(Game):
 
+class RotateGame(Game):
     def __init__(self, init_state=None):
         self.ops = {0: lambda: self._op(0, 0),
                     1: lambda: self._op(1, 0),
