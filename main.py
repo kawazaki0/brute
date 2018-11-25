@@ -1,4 +1,4 @@
-from brute import brute
+from brute import brute_async as brute
 from rotate_game import RotateGame
 
 
@@ -7,3 +7,4 @@ if __name__ == '__main__':
             [4,5,9],
             [7,8,6]]
     res = brute(RotateGame, curr)
+    print(res)
