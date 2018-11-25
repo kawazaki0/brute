@@ -8,7 +8,7 @@ import multiprocessing
 
 
 def _brute_length(game_cls, start_state, l):
-    # print("start", l)
+    # print(" " * (l) + "*", l)
     prev_time = time.time()
     for sequence in itertools.product(range(4), repeat=l):
         game = game_cls(start_state)
@@ -19,6 +19,7 @@ def _brute_length(game_cls, start_state, l):
             # print("yeah", sequence, time.time() - prev_time)
             return sequence
     # print("done", l, time.time() - prev_time)
+    # print(" "*(l) + "*")
 
 
 def brute_sync(game_cls, init_state, max_length=15):
@@ -29,6 +30,7 @@ def brute_sync(game_cls, init_state, max_length=15):
             return r
     return None
 
+
 def brute_async(game_cls, init_state, max_length=15, pool_size=3):
     do_f = functools.partial(_brute_length, game_cls, init_state)
     processes = []
@@ -36,8 +38,9 @@ def brute_async(game_cls, init_state, max_length=15, pool_size=3):
         for l in range(max_length):
             processes.append(pool.apply_async(do_f, (l,)))
 
-        for p in processes:
+        for i, p in enumerate(processes):
             r = p.get()
+            # print("*" * i)
             if r is not None:
                 return r
     return None

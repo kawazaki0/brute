@@ -2,6 +2,7 @@ from copy import deepcopy
 
 
 class Game():
+
     def __init__(self, init_state):
         self._state = init_state
 
