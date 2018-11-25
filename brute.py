@@ -4,6 +4,7 @@ import time
 
 from copy import deepcopy
 from multiprocessing import Pool
+import multiprocessing
 
 
 def _brute_length(game_cls, start_state, l):
@@ -28,18 +29,15 @@ def brute_sync(game_cls, init_state, max_length=10, pool_size=3):
             return r
     return None
 
-def brute_async(game_cls, init_state, max_length=10, pool_size=3):
+def brute_async(game_cls, init_state, max_length=15, pool_size=3):
     do_f = functools.partial(_brute_length, game_cls, init_state)
-    with Pool(pool_size) as p:
-        res = p.map(do_f, range(max_length))
+    processes = []
+    with Pool(processes=4) as pool:         # start 4 worker processes
+        for l in range(max_length):
+            processes.append(pool.apply_async(do_f, (l,)))
 
-    res_without_none = [r for r in res if r is not None]
-
-    if not res_without_none:
-        return None
-    else:
-        shortest_len = min(map(len, res_without_none))
-        shortest_sequence = [r for r in res_without_none if len(r) == shortest_len][0]
-        return shortest_sequence
-
-
+        for p in processes:
+            r = p.get()
+            if r is not None:
+                return r
+    return None
